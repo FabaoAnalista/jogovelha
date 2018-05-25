@@ -1,5 +1,6 @@
-%%%%% Edeilson Carlos Messias - 15.1.5954
-%%%%% Silvandro Sergio Martins Oliveira - 12.2.8233
+%%%%% André Mattos - 11.2.8075
+%%%%% Fábio Humberto - 13.2.8398
+%%%%% Silvandro Oliveira - 12.2.8233
 
 inicio :- nl, write('Bem vindos ao jogo da velha UFOP!'), nl, infos, lerDimensao(N), criarTabuleiro(N, N, Tabuleiro), iniciarJogo(N, Tabuleiro).
 
@@ -17,7 +18,7 @@ lerDimensao(N) :-
 	nl, read(N), N > 0, !.
 
 % Cria uma matriz NxN para representar o tabuleiro
-criarTabuleiro(_, Linha, []) :- Linha=0,!.
+criarTabuleiro(_, 0, []) :- !.
 criarTabuleiro(Dimensao, Linha, Tabuleiro) :-
 	LinhaAux is Linha-1,
 	criarLinha(Dimensao, Lista),
@@ -25,7 +26,7 @@ criarTabuleiro(Dimensao, Linha, Tabuleiro) :-
 	criarTabuleiro(Dimensao, LinhaAux, Matriz).
 
 % Cria a linha da matriz
-criarLinha(Dimensao, []) :- Dimensao=0, !.
+criarLinha(0, []) :- !.
 criarLinha(Dimensao, Linha) :- N is Dimensao-1, insere(0, LinhaAux, Linha), criarLinha(N, LinhaAux).
 	
 insere(Elem, Lista, [Elem|Lista]).
@@ -39,7 +40,7 @@ exibirTabuleiro(Dimensao, Tabuleiro) :-
 % Imprime as colunas do tabuleiro
 colunaTabuleiro(Dimensao) :- tab(2), indiceColuna(0, Dimensao).
 
-indiceColuna(_, Dimensao) :- Dimensao=0, !.
+indiceColuna(_, 0) :- !.
 indiceColuna(Inicial, Dimensao) :-
 	N is Dimensao-1,
 	N1 is Inicial+1,
@@ -180,8 +181,8 @@ testarDiagonal(Dimensao, Tabuleiro, Linha, Coluna, Jogador) :-
 	X is Linha+1, Y is Coluna+1,
 	testarDiagonal(Dimensao, Tabuleiro, X, Y, Jogador).
 
-testarValorColuna(1, Valor) :- (Valor=0; Valor=2).
-testarValorColuna(2, Valor) :- (Valor=0; Valor=1).
+testarValorColuna(1, Valor) :- Valor=0; Valor=2.
+testarValorColuna(2, Valor) :- Valor=0; Valor=1.
 
 % Verifica se algúem venceu por completar a diagonal secundária
 fimDeJogoPorDiagonal2(Dimensao, Tabuleiro, Jogador) :- not(testarDiagonal2(Dimensao, Tabuleiro, 1, Dimensao, Jogador)), !.

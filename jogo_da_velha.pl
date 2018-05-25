@@ -1,20 +1,19 @@
 %%%%% Edeilson Carlos Messias - 15.1.5954
 %%%%% Silvandro Sergio Martins Oliveira - 12.2.8233
 
-inicio :- infos, lerDimensao(N), criarTabuleiro(N, N, Tabuleiro), iniciarJogo(N, Tabuleiro).
+inicio :- nl, write('Bem vindos ao jogo da velha UFOP!'), nl, infos, lerDimensao(N), criarTabuleiro(N, N, Tabuleiro), iniciarJogo(N, Tabuleiro).
 
-infos :- nl, write('Bem vindos ao jogo da velha UFOP! Para jogar, sigam as seguintes instruções:'), nl, nl,
+infos :- nl, write('INSTRUÇÕES:'), nl, nl,
          write('1 - Inicialmente, informe o tamanho da matriz que represente o jogo com um número qualquer N seguido de um ponto e aperte Enter'), nl,
          write('2 - Em seguida, o programa irá solicitar que o Jogador 1 entre com um número qualquer N seguido de um ponto para representar o número da linha na matriz e aperte Enter'), nl,
          write('3 - Próximo passo, o programa irá solicitar que o Jogador 1 entre com um número qualquer N seguido de um ponto para representar o número da coluna na matriz e aperte Enter, e com isso a posição informada nos pontos 2 e 3 irão representar a jogada do Jogador 1'), nl,
          write('4 - Os pontos 2 e 3 serão repetidos para capturar a jogada do Jogador 2'), nl,
-         write('5 - O primeiro jogador que conseguir completar uma linha, coluna ou diagonal apenas com seu respectivo simbolo, vencerá o jogo'), nl, nl,
-         write('BOA SORTE JOGADORES!'), nl, nl.
+         write('5 - O primeiro jogador que conseguir completar uma linha, coluna ou diagonal apenas com seu respectivo símbolo, vencerá o jogo'), nl, nl, nl, nl.
 
 % Ler a dimensão do jogo pelo usuário até que seja maior que zero
 lerDimensao(N) :-
 	repeat,
-	write('Digite a dimensão do jogo, que deve ser maior que 0:'),
+	write('Digite a dimensão do jogo, que deve ser maior que 0, seguido de um ponto e depois tecle Enter:'),
 	nl, read(N), N > 0, !.
 
 % Cria uma matriz NxN para representar o tabuleiro
@@ -77,11 +76,13 @@ imprimeJogada(2):- write(' O |').
 %Inicia o a partida
 iniciarJogo(Dimensao, Tabuleiro) :-
 	limparTela,
+    infos,
 	exibirTabuleiro(Dimensao, Tabuleiro),
 	nl, nl, write('JOGADOR 1 - Digite a posição válida do Tabuleiro:'),
 	realizarJogada(1, Dimensao, Tabuleiro, NovoTabuleiro),
 	testarFimDeJogo(Dimensao, NovoTabuleiro, 1),
 	limparTela,
+    infos,
 	exibirTabuleiro(Dimensao, NovoTabuleiro),
 	nl, nl, write('JOGADOR 2 - Digite a posição válida do Tabuleiro:'),
 	realizarJogada(2, Dimensao, NovoTabuleiro, NovoTabuleiro2),
@@ -95,9 +96,9 @@ realizarJogada(Jogador, Dimensao, Tabuleiro, NovoTabuleiro) :-
 
 lerJogada(Dimensao, Tabuleiro, Linha, Coluna) :-
 	repeat,
-	nl, nl, write('Linha:'), nl, read(Linha),
-	nl, write('Coluna:'), nl, read(Coluna), nl,
-	Linha>0, Linha=<Dimensao, Coluna>0, Coluna =< Dimensao,
+	nl, nl, write('Digite o número da LINHA, seguido de um ponto e depois tecle Enter:'), nl, read(Linha),
+	nl, write('Digite o número da COLUNA, seguido de um ponto e depois tecle Enter:'), nl, read(Coluna), nl,
+	Linha>0, Linha=<Dimensao, Coluna>0, Coluna=<Dimensao,
 	valorPosicao(Tabuleiro, Linha, Coluna, Valor), Valor=0, !.
 
 % Retorna o valor da posição Linha x Coluna enviados
@@ -121,7 +122,7 @@ atualizarPosicao([Cabeca|Cauda], Posicao, Jogador, [Cabeca|Retorno]) :- N is Pos
 % Verifica se o jogo terminou ou não
 testarFimDeJogo(Dimensao, Tabuleiro, Jogador) :-
 	verificaFimDeJogo(Dimensao, Tabuleiro, Jogador),
-	exibirTabuleiro(Dimensao, Tabuleiro), !, fail.
+	exibirTabuleiro(Dimensao, Tabuleiro), nl, !, fail.
 testarFimDeJogo(_,_,_).
 
 verificaFimDeJogo(Dimensao, Tabuleiro, Jogador) :-
@@ -145,9 +146,9 @@ testarLinha(Dimensao, Linha, Tabuleiro, Jogador) :-
 testarValorLinha(1, Linha) :- member(1, Linha), not(member(0, Linha)), not(member(2, Linha)).
 testarValorLinha(2, Linha) :- member(2, Linha), not(member(0, Linha)), not(member(1, Linha)).
 
-imprimirGanhador(0) :- limparTela, nl, write('EMPATE'), nl, nl.
-imprimirGanhador(1) :- limparTela, nl, write('Jogador 1 venceu'), nl, nl.
-imprimirGanhador(2) :- limparTela, nl, write('Jogador 2 venceu'), nl, nl.
+imprimirGanhador(0) :- limparTela, nl, write('O jogo terminou em empate. Digite a expressão "inicio." para começar novamente o jogo.'), nl, nl.
+imprimirGanhador(1) :- limparTela, nl, write('Jogador 1 venceu. Digite a expressão "inicio." para começar novamente o jogo.'), nl, nl.
+imprimirGanhador(2) :- limparTela, nl, write('Jogador 2 venceu. Digite a expressão "inicio." para começar novamente o jogo.'), nl, nl.
 
 % Verifica se algúem venceu por completar uma coluna
 fimDeJogoPorColuna(Dimensao, Tabuleiro, Jogador) :- testarColunas(Dimensao, Tabuleiro, 1, 1, Jogador), !.
